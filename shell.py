@@ -3,7 +3,7 @@
 
 import colorama
 from colorama import Fore, Style
-from hyperion_client import HyperionClient
+from hyperion_api import HyperionAPI
 
 
 class Terminal:
@@ -53,10 +53,10 @@ def main():
         "SYSTEM",
     )
 
-    HyperionClient.api_key = 0
-    HyperionClient.uri = "127.0.0.1:5005"
-    HyperionClient.mode = "WEBSOCKET"
-    HyperionClient.stream_callback = streaming_callback
+    HyperionAPI.api_key = 0
+    HyperionAPI.uri = "127.0.0.1:5005"
+    HyperionAPI.mode = "WEBSOCKET"
+    HyperionAPI.stream_callback = streaming_callback
 
     messages = [
         {
@@ -76,7 +76,7 @@ def main():
             prompt = command.split("prompt: ")[1]
             messages.append({"role": "user", "content": prompt})
             stream = True
-            response = HyperionClient.generate(model, messages, stream=stream)
+            response = HyperionAPI.generate(model, messages, stream=stream)
             output = response.get("output")
             messages.append({"role": "assistant", "content": output})
             Terminal.output(response, "INFO")
@@ -90,17 +90,17 @@ def main():
                 params = {}
 
             if method == "load_model":
-                response = HyperionClient.load_model(params, stream=False)
+                response = HyperionAPI.load_model(params, stream=False)
             elif method == "unload_model":
-                response = HyperionClient.unload_model(params)
+                response = HyperionAPI.unload_model(params)
             elif method == "get_loaded_models":
-                response = HyperionClient.get_loaded_models()
+                response = HyperionAPI.get_loaded_models()
             elif method == "get_cached_models":
-                response = HyperionClient.get_cached_models()
+                response = HyperionAPI.get_cached_models()
             elif method == "tokenize":
-                response = HyperionClient.tokenize(params)
+                response = HyperionAPI.tokenize(params)
             elif method == "detokenize":
-                response = HyperionClient.detokenize(params)
+                response = HyperionAPI.detokenize(params)
             else:
                 Terminal.output("Unknown method: " + method, "ERROR")
                 continue

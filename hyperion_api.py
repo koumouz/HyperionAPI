@@ -3,7 +3,7 @@ from websocket import create_connection
 import json
 
 
-class HyperionClient:
+class HyperionAPI:
     api_key = 0
     uri = ""
     mode = "REST"
@@ -22,22 +22,22 @@ class HyperionClient:
         }
         params.update(kwargs)
 
-        if HyperionClient.mode == "REST":
+        if HyperionAPI.mode == "REST":
             request = {"params": params}
             response = requests.post(
-                f"http://{HyperionClient.uri}/model/generate/", json=request
+                f"http://{HyperionAPI.uri}/model/generate/", json=request
             )
             response = response.json()
             return response
-        elif HyperionClient.mode == "WEBSOCKET":
-            websocket = create_connection(f"ws://{HyperionClient.uri}")
+        elif HyperionAPI.mode == "WEBSOCKET":
+            websocket = create_connection(f"ws://{HyperionAPI.uri}")
             request = {"method": f"model.generate", "params": params}
             websocket.send(json.dumps(request))
 
-            if stream == True and HyperionClient.stream_callback is not None:
+            if stream == True and HyperionAPI.stream_callback is not None:
                 while True:
                     response = json.loads(websocket.recv())
-                    HyperionClient.stream_callback(response)
+                    HyperionAPI.stream_callback(response)
                     if response.get("stream_end") == True:
                         break
 
@@ -54,22 +54,22 @@ class HyperionClient:
             "model_name": model_name,
             "stream": stream,
         }
-        if HyperionClient.mode == "REST":
+        if HyperionAPI.mode == "REST":
             request = {"params": params}
             response = requests.post(
-                f"http://{HyperionClient.uri}/model/load/", json=request
+                f"http://{HyperionAPI.uri}/model/load/", json=request
             )
             response = response.json()
             return response
-        elif HyperionClient.mode == "WEBSOCKET":
-            websocket = create_connection(f"ws://{HyperionClient.uri}")
+        elif HyperionAPI.mode == "WEBSOCKET":
+            websocket = create_connection(f"ws://{HyperionAPI.uri}")
             request = {"method": f"model.load", "params": params}
             websocket.send(json.dumps(request))
 
-            if stream == True and HyperionClient.stream_callback is not None:
+            if stream == True and HyperionAPI.stream_callback is not None:
                 while True:
                     response = json.loads(websocket.recv())
-                    HyperionClient.stream_callback(response)
+                    HyperionAPI.stream_callback(response)
                     if response.get("stream_end") == True:
                         break
 
@@ -81,15 +81,15 @@ class HyperionClient:
 
     def unload_model(model_name):
         params = {"model_name": model_name}
-        if HyperionClient.mode == "REST":
+        if HyperionAPI.mode == "REST":
             request = {"params": params}
             response = requests.post(
-                f"http://{HyperionClient.uri}/model/unload/", json=request
+                f"http://{HyperionAPI.uri}/model/unload/", json=request
             )
             response = response.json()
             return response
-        elif HyperionClient.mode == "WEBSOCKET":
-            websocket = create_connection(f"ws://{HyperionClient.uri}")
+        elif HyperionAPI.mode == "WEBSOCKET":
+            websocket = create_connection(f"ws://{HyperionAPI.uri}")
             request = {"method": f"model.unload", "params": params}
             websocket.send(json.dumps(request))
             response = json.loads(websocket.recv())
@@ -100,14 +100,14 @@ class HyperionClient:
 
     def get_loaded_models():
         params = {}
-        if HyperionClient.mode == "REST":
+        if HyperionAPI.mode == "REST":
             response = requests.get(
-                f"http://{HyperionClient.uri}/model/loaded/", json=request
+                f"http://{HyperionAPI.uri}/model/loaded/", json=request
             )
             response = response.json()
             return response
-        elif HyperionClient.mode == "WEBSOCKET":
-            websocket = create_connection(f"ws://{HyperionClient.uri}")
+        elif HyperionAPI.mode == "WEBSOCKET":
+            websocket = create_connection(f"ws://{HyperionAPI.uri}")
             request = {"method": f"model.get_loaded"}
             websocket.send(json.dumps(request))
             response = json.loads(websocket.recv())
@@ -118,14 +118,14 @@ class HyperionClient:
 
     def get_cached_models():
         params = {}
-        if HyperionClient.mode == "REST":
+        if HyperionAPI.mode == "REST":
             response = requests.get(
-                f"http://{HyperionClient.uri}/model/cached/", json=request
+                f"http://{HyperionAPI.uri}/model/cached/", json=request
             )
             response = response.json()
             return response
-        elif HyperionClient.mode == "WEBSOCKET":
-            websocket = create_connection(f"ws://{HyperionClient.uri}")
+        elif HyperionAPI.mode == "WEBSOCKET":
+            websocket = create_connection(f"ws://{HyperionAPI.uri}")
             request = {"method": f"model.get_cached"}
             websocket.send(json.dumps(request))
             response = json.loads(websocket.recv())
@@ -139,15 +139,15 @@ class HyperionClient:
             "model_name": model_name,
             "text": text,
         }
-        if HyperionClient.mode == "REST":
+        if HyperionAPI.mode == "REST":
             request = {"params": params}
             response = requests.post(
-                f"http://{HyperionClient.uri}/model/tokenize/", json=request
+                f"http://{HyperionAPI.uri}/model/tokenize/", json=request
             )
             response = response.json()
             return response
-        elif HyperionClient.mode == "WEBSOCKET":
-            websocket = create_connection(f"ws://{HyperionClient.uri}")
+        elif HyperionAPI.mode == "WEBSOCKET":
+            websocket = create_connection(f"ws://{HyperionAPI.uri}")
             request = {"method": f"model.tokenize", "params": params}
             websocket.send(json.dumps(request))
             response = json.loads(websocket.recv())
@@ -161,15 +161,15 @@ class HyperionClient:
             "model_name": model_name,
             "tokens": tokens,
         }
-        if HyperionClient.mode == "REST":
+        if HyperionAPI.mode == "REST":
             request = {"params": params}
             response = requests.post(
-                f"http://{HyperionClient.uri}/model/detokenize/", json=request
+                f"http://{HyperionAPI.uri}/model/detokenize/", json=request
             )
             response = response.json()
             return response
-        elif HyperionClient.mode == "WEBSOCKET":
-            websocket = create_connection(f"ws://{HyperionClient.uri}")
+        elif HyperionAPI.mode == "WEBSOCKET":
+            websocket = create_connection(f"ws://{HyperionAPI.uri}")
             request = {"method": f"model.detokenize", "params": params}
             websocket.send(json.dumps(request))
             response = json.loads(websocket.recv())
