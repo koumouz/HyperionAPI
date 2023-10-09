@@ -52,7 +52,7 @@ class HyperionAPI {
             method = "model.generate"
         }
 
-        return await this._call(method, params);
+        return await this._call(method, params, stream);
     }
 
 
@@ -143,8 +143,8 @@ class HyperionAPI {
         return await this._call(method, params);
     }
 
-    async _call(apiMethod, params = null) {
-        if (HyperionAPI.mode === "REST") {
+    async _call(apiMethod, params = null, stream = false) {
+        if (HyperionAPI.protocol === "REST") {
             const request = { params: params };
             let response = null;
             if (params !== null) {
@@ -169,7 +169,7 @@ class HyperionAPI {
             const jsonResponse = await response.json();
             return jsonResponse;
         }
-        else if (HyperionAPI.mode === "WEBSOCKET") {
+        else if (HyperionAPI.protocol === "WEBSOCKET") {
             return new Promise((resolve, reject) => {
                 const websocket = new WebSocket(`ws://${HyperionAPI.uri}`);
                 const request = { method: apiMethod, params: params };
