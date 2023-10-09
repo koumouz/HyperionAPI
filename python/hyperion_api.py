@@ -6,7 +6,7 @@ import json
 class HyperionAPI:
     api_key = 0
     uri = ""
-    mode = "REST"
+    protocol = "REST"
     stream_callback = None
 
     def generate(
