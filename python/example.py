@@ -85,22 +85,21 @@ def main():
                 Terminal.output(output, "AI")
         elif "method: " in command:
             method = command.split("method: ")[1]
-            params = Terminal.input("params: ")
-            if params == "":
-                params = {}
 
             if method == "load_model":
-                response = HyperionAPI.load_model(params, stream=False)
+                params = Terminal.input("params: ")
+                response = HyperionAPI.load_model("model name: ", stream=False)
             elif method == "unload_model":
+                params = Terminal.input("model name: ")
                 response = HyperionAPI.unload_model(params)
             elif method == "get_loaded_models":
                 response = HyperionAPI.get_loaded_models()
             elif method == "get_cached_models":
                 response = HyperionAPI.get_cached_models()
             elif method == "tokenize":
-                response = HyperionAPI.tokenize(params)
+                response = HyperionAPI.tokenize("llama-2-13b-chat", "hello world")
             elif method == "detokenize":
-                response = HyperionAPI.detokenize(params)
+                response = HyperionAPI.detokenize("llama-2-13b-chat", [1, 22172, 3186])
             else:
                 Terminal.output("Unknown method: " + method, "ERROR")
                 continue

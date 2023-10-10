@@ -31,7 +31,7 @@ class HyperionAPI:
 
     def load_model(model_name, stream=False):
         params = {
-            "model_name": model_name,
+            "model": model_name,
             "stream": stream,
         }
         if HyperionAPI.mode == "REST":
@@ -42,7 +42,7 @@ class HyperionAPI:
         return HyperionAPI._call(api_method, params, stream)
 
     def unload_model(model_name):
-        params = {"model_name": model_name}
+        params = {"model": model_name}
         if HyperionAPI.mode == "REST":
             api_method = "model/unload/"
         else:
@@ -70,7 +70,7 @@ class HyperionAPI:
 
     def tokenize(model_name, text):
         params = {
-            "model_name": model_name,
+            "model": model_name,
             "text": text,
         }
 
@@ -83,7 +83,7 @@ class HyperionAPI:
 
     def detokenize(model_name, tokens):
         params = {
-            "model_name": model_name,
+            "model": model_name,
             "tokens": tokens,
         }
         if HyperionAPI.protocol == "REST":
