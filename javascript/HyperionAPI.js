@@ -58,7 +58,7 @@ class HyperionAPI {
 
     async loadModel({ modelName = "", stream = false } = {}) {
         let params = {
-            model_name: modelName,
+            model: modelName,
             stream: stream,
         };
 
@@ -73,7 +73,7 @@ class HyperionAPI {
     }
 
     async unloadModel({ modelName = "" } = {}) {
-        let params = { model_name: modelName };
+        let params = { model: modelName };
 
         let method = "";
         if (HyperionAPI.protocol === "REST") {
@@ -112,7 +112,7 @@ class HyperionAPI {
 
     async tokenize({ modelName = "", text = "" } = {}) {
         let params = {
-            model_name: modelName,
+            model: modelName,
             text: text,
         };
 
@@ -129,7 +129,7 @@ class HyperionAPI {
 
     async detokenize({ modelName = "", tokens = [] } = {}) {
         let params = {
-            model_name: modelName,
+            model: modelName,
             tokens: tokens,
         };
 
