@@ -173,7 +173,6 @@ class HyperionAPI {
             return new Promise((resolve, reject) => {
                 const websocket = new WebSocket(`ws://${HyperionAPI.uri}`);
                 const request = { method: apiMethod, params: params };
-                console.log(JSON.stringify(request))
                 websocket.onopen = () => {
                     websocket.send(JSON.stringify(request));
                 };
