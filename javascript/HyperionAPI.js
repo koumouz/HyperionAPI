@@ -56,9 +56,9 @@ class HyperionAPI {
     }
 
 
-    async loadModel({ modelName = "", stream = false } = {}) {
+    async loadModel({ model = "", stream = false } = {}) {
         let params = {
-            model: modelName,
+            model: model,
             stream: stream,
         };
 
@@ -72,8 +72,8 @@ class HyperionAPI {
         return await this._call(method, params);
     }
 
-    async unloadModel({ modelName = "" } = {}) {
-        let params = { model: modelName };
+    async unloadModel({ model = "" } = {}) {
+        let params = { model: model };
 
         let method = "";
         if (HyperionAPI.protocol === "REST") {
@@ -110,14 +110,14 @@ class HyperionAPI {
         return await this._call(method);
     }
 
-    async tokenize({ modelName = "", text = "" } = {}) {
+    async tokenize({ model = "", text = "" } = {}) {
         let params = {
-            model: modelName,
+            model: model,
             text: text,
         };
 
         let method = "";
-        if (HyperionAPI.mode === "REST") {
+        if (HyperionAPI.protocol === "REST") {
             method = "model/tokenize/"
         }
         else {
@@ -127,14 +127,14 @@ class HyperionAPI {
         return await this._call(method, params);
     }
 
-    async detokenize({ modelName = "", tokens = [] } = {}) {
+    async detokenize({ model = "", tokens = [] } = {}) {
         let params = {
-            model: modelName,
+            model: model,
             tokens: tokens,
         };
 
         let method = "";
-        if (HyperionAPI.mode === "REST") {
+        if (HyperionAPI.protocol === "REST") {
             method = "model/detokenize/"
         } else {
             method = "model.detokenize"
@@ -178,15 +178,16 @@ class HyperionAPI {
                 };
                 websocket.onmessage = (event) => {
                     const response = JSON.parse(event.data);
-                    if (stream === true && HyperionAPI.streamCallback !== null) {
+                    // Only send streamed tokens to the callback
+                    if (stream === true && HyperionAPI.streamCallback !== null && response.stream_end != null) {
                         HyperionAPI.streamCallback(response);
-                        if (response.stream_end === true) {
-                            websocket.close();
-                            resolve(response);
-                        }
-                    } else {
-                        websocket.close();
+                    }
+
+                    // This is the final response, so close the websocket
+                    // and resolve the promise
+                    if (response.success == "true" || response.success == "false") {
                         resolve(response);
+                        websocket.close();
                     }
                 };
                 websocket.onerror = (err) => {
