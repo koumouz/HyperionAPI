@@ -1,16 +1,11 @@
 const WebSocket = require('ws');
 
 class HyperionAPI {
-    static apiKey = 0;
-    static uri = "";
-    static mode = "REST";
-    static streamCallback = null;
-
     constructor({ apiKey = 0, uri = "", protocol = "REST", streamCallback = null } = {}) {
-        HyperionAPI.apiKey = apiKey;
-        HyperionAPI.uri = uri;
-        HyperionAPI.protocol = protocol;
-        HyperionAPI.streamCallback = streamCallback;
+        this.apiKey = apiKey;
+        this.uri = uri;
+        this.protocol = protocol;
+        this.streamCallback = streamCallback;
     }
 
     async generate({
@@ -46,7 +41,7 @@ class HyperionAPI {
         }
 
         let method = "";
-        if (HyperionAPI.protocol === "REST") {
+        if (this.protocol === "REST") {
             method = "model/generate/"
         } else {
             method = "model.generate"
@@ -63,7 +58,7 @@ class HyperionAPI {
         };
 
         let method = "";
-        if (HyperionAPI.protocol === "REST") {
+        if (this.protocol === "REST") {
             method = "model/load/"
         } else {
             method = "model.load"
@@ -76,7 +71,7 @@ class HyperionAPI {
         let params = { model: model };
 
         let method = "";
-        if (HyperionAPI.protocol === "REST") {
+        if (this.protocol === "REST") {
             method = "model/unload/"
         }
         else {
@@ -88,7 +83,7 @@ class HyperionAPI {
 
     async getLoadedModels() {
         let method = "";
-        if (HyperionAPI.protocol === "REST") {
+        if (this.protocol === "REST") {
             method = "model/loaded/"
         }
         else {
@@ -100,7 +95,7 @@ class HyperionAPI {
 
     async getCachedModels() {
         let method = "";
-        if (HyperionAPI.protocol === "REST") {
+        if (this.protocol === "REST") {
             method = "model/cached/"
         }
         else {
@@ -117,7 +112,7 @@ class HyperionAPI {
         };
 
         let method = "";
-        if (HyperionAPI.protocol === "REST") {
+        if (this.protocol === "REST") {
             method = "model/tokenize/"
         }
         else {
@@ -134,7 +129,7 @@ class HyperionAPI {
         };
 
         let method = "";
-        if (HyperionAPI.protocol === "REST") {
+        if (this.protocol === "REST") {
             method = "model/detokenize/"
         } else {
             method = "model.detokenize"
@@ -144,12 +139,12 @@ class HyperionAPI {
     }
 
     async _call(apiMethod, params = null, stream = false) {
-        if (HyperionAPI.protocol === "REST") {
+        if (this.protocol === "REST") {
             const request = { params: params };
             let response = null;
             if (params !== null) {
                 response = await fetch(
-                    "http://${HyperionAPI.uri}/" + apiMethod,
+                    "http://${this.uri}/" + apiMethod,
                     {
                         method: "POST",
                         headers: {
@@ -160,7 +155,7 @@ class HyperionAPI {
                 );
             } else {
                 response = await fetch(
-                    `http://${HyperionAPI.uri}/model/cached/`,
+                    `http://${this.uri}/model/cached/`,
                     {
                         method: "GET",
                     }
@@ -169,18 +164,19 @@ class HyperionAPI {
             const jsonResponse = await response.json();
             return jsonResponse;
         }
-        else if (HyperionAPI.protocol === "WEBSOCKET") {
+        else if (this.protocol === "WEBSOCKET") {
             return new Promise((resolve, reject) => {
-                const websocket = new WebSocket(`ws://${HyperionAPI.uri}`);
+                const websocket = new WebSocket(`ws://${this.uri}`);
                 const request = { method: apiMethod, params: params };
                 websocket.onopen = () => {
                     websocket.send(JSON.stringify(request));
                 };
                 websocket.onmessage = (event) => {
                     const response = JSON.parse(event.data);
-                    // Only send streamed tokens to the callback
-                    if (stream === true && HyperionAPI.streamCallback !== null && response.stream_end != null) {
-                        HyperionAPI.streamCallback(response);
+                    // Only send streamed tokens to the callback. Do not close the socket
+                    // until the stream ends and we received the final response.
+                    if (stream === true && this.streamCallback !== null && response.stream_end != null) {
+                        this.streamCallback(response);
                     }
 
                     // This is the final response, so close the websocket
