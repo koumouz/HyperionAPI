@@ -96,6 +96,13 @@ def main():
                 response = HyperionAPI.get_loaded_models()
             elif method == "get_cached_models":
                 response = HyperionAPI.get_cached_models()
+            elif method == "create_embedding":
+                # text-embedding-ada-002
+                # llama-2-13b-chat
+                # all-MiniLM-L6-v2
+                response = HyperionAPI.create_embedding(
+                    model="all-MiniLM-L6-v2", input="hello world"
+                )
             elif method == "tokenize":
                 response = HyperionAPI.tokenize("llama-2-13b-chat", "hello world")
             elif method == "detokenize":

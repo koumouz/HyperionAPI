@@ -68,6 +68,18 @@ class HyperionAPI:
 
         return HyperionAPI._call(api_method, params)
 
+    def create_embedding(model, input):
+        params = {
+            "model": model,
+            "input": input,
+        }
+        if HyperionAPI.protocol == "REST":
+            api_method = "embedding/create/"
+        else:
+            api_method = "embedding.create"
+
+        return HyperionAPI._call(api_method, params)
+
     def tokenize(model, text):
         params = {
             "model": model,
