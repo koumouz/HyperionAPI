@@ -101,6 +101,22 @@ class HyperionAPI {
 		return await this._call(method);
 	}
 
+	async createEmbedding({ model = "", input = "" } = {}) {
+		let params = {
+			model: model,
+			input: input,
+		};
+
+		let method = "";
+		if (this.protocol === "REST") {
+			method = "embedding/create/";
+		} else {
+			method = "embedding.create";
+		}
+
+		return await this._call(method, params);
+	}
+
 	async tokenize({ model = "", text = "" } = {}) {
 		let params = {
 			model: model,
