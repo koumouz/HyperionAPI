@@ -9,7 +9,14 @@ class HyperionAPI:
     protocol = "REST"
     stream_callback = None
 
+    def __init__(self, api_key=0, uri="", protocol="REST", stream_callback=None):
+        self.api_key = api_key
+        self.uri = uri
+        self.protocol = protocol
+        self.stream_callback = stream_callback
+
     def generate(
+        self,
         model,
         messages,
         stream=False,
@@ -22,112 +29,159 @@ class HyperionAPI:
         }
         params.update(kwargs)
 
-        if HyperionAPI.protocol == "REST":
+        if self.protocol == "REST":
             api_method = "model/generate/"
         else:
             api_method = "model.generate"
 
-        return HyperionAPI._call(api_method, params, stream)
+        try:
+            response = self._call(api_method, params)
+            return response
+        except Exception as error:
+            print(f"Hyperion API Error in {api_method}: ", error)
+            response = {"success": "false", "error": str(error)}
+            return response
 
-    def load_model(model, stream=False):
+    def load_model(self, model, stream=False):
         params = {
             "model": model,
             "stream": stream,
         }
-        if HyperionAPI.mode == "REST":
+        if self.protocol == "REST":
             api_method = "model/load"
         else:
             api_method = "model.load"
 
-        return HyperionAPI._call(api_method, params, stream)
+        try:
+            response = self._call(api_method, params)
+            return response
+        except Exception as error:
+            print(f"Hyperion API Error in {api_method}: ", error)
+            response = {"success": "false", "error": str(error)}
+            return response
 
-    def unload_model(model):
+    def unload_model(self, model):
         params = {"model": model}
-        if HyperionAPI.mode == "REST":
+        if self.protocol == "REST":
             api_method = "model/unload/"
         else:
             api_method = "model.unload"
 
-        return HyperionAPI._call(api_method, params)
+        try:
+            response = self._call(api_method, params)
+            return response
+        except Exception as error:
+            print(f"Hyperion API Error in {api_method}: ", error)
+            response = {"success": "false", "error": str(error)}
+            return response
 
-    def get_loaded_models():
+    def get_loaded_models(self):
         params = None
-        if HyperionAPI.protocol == "REST":
+        if self.protocol == "REST":
             api_method = "model/loaded/"
         else:
             api_method = "model.get_loaded"
 
-        return HyperionAPI._call(api_method, params)
+        try:
+            response = self._call(api_method, params)
+            return response
+        except Exception as error:
+            print(f"Hyperion API Error in {api_method}: ", error)
+            response = {"success": "false", "error": str(error)}
+            return response
 
-    def get_cached_models():
+    def get_cached_models(self):
         params = None
-        if HyperionAPI.protocol == "REST":
+        if self.protocol == "REST":
             api_method = "model/cached/"
         else:
             api_method = "model.get_cached"
 
-        return HyperionAPI._call(api_method, params)
+        try:
+            response = self._call(api_method, params)
+            return response
+        except Exception as error:
+            print(f"Hyperion API Error in {api_method}: ", error)
+            response = {"success": "false", "error": str(error)}
+            return response
 
-    def create_embedding(model, input):
+    def create_embedding(self, model, input):
         params = {
             "model": model,
             "input": input,
         }
-        if HyperionAPI.protocol == "REST":
+        if self.protocol == "REST":
             api_method = "embedding/create/"
         else:
             api_method = "embedding.create"
 
-        return HyperionAPI._call(api_method, params)
+        try:
+            response = self._call(api_method, params)
+            return response
+        except Exception as error:
+            print(f"Hyperion API Error in {api_method}: ", error)
+            response = {"success": "false", "error": str(error)}
+            return response
 
-    def tokenize(model, text):
+    def tokenize(self, model, text):
         params = {
             "model": model,
             "text": text,
         }
 
-        if HyperionAPI.protocol == "REST":
+        if self.protocol == "REST":
             api_method = "model/tokenize/"
         else:
             api_method = "model.tokenize"
 
-        return HyperionAPI._call(api_method, params)
+        try:
+            response = self._call(api_method, params)
+            return response
+        except Exception as error:
+            print(f"Hyperion API Error in {api_method}: ", error)
+            response = {"success": "false", "error": str(error)}
+            return response
 
-    def detokenize(model, tokens):
+    def detokenize(self, model, tokens):
         params = {
             "model": model,
             "tokens": tokens,
         }
-        if HyperionAPI.protocol == "REST":
+        if self.protocol == "REST":
             api_method = "model/detokenize/"
         else:
             api_method = "model.detokenize"
 
-        return HyperionAPI._call(api_method, params)
+        try:
+            response = self._call(api_method, params)
+            return response
+        except Exception as error:
+            print(f"Hyperion API Error in {api_method}: ", error)
+            response = {"success": "false", "error": str(error)}
+            return response
 
-    def _call(api_method, params=None, stream=False):
-        if HyperionAPI.protocol == "REST":
+    def _call(self, api_method, params=None, stream=False):
+        if self.protocol == "REST":
             if params is None:
-                response = requests.get(
-                    f"http://{HyperionAPI.uri}/{api_method}", json=request
-                )
+                response = requests.get(f"http://{self.uri}/{api_method}", json=request)
                 response = response.json()
             else:
                 request = {"params": params}
                 response = requests.post(
-                    f"http://{HyperionAPI.uri}/{api_method}", json=request
+                    f"http://{self.uri}/{api_method}", json=request
                 )
                 response = response.json()
             return response
-        elif HyperionAPI.protocol == "WEBSOCKET":
-            websocket = create_connection(f"ws://{HyperionAPI.uri}")
+        elif self.protocol == "WEBSOCKET":
+            websocket = create_connection(f"ws://{self.uri}")
             request = {"method": f"{api_method}", "params": params}
+            stream = params["stream"]
             websocket.send(json.dumps(request))
 
-            if stream == True and HyperionAPI.stream_callback is not None:
+            if stream == True and self.stream_callback is not None:
                 while True:
                     response = json.loads(websocket.recv())
-                    HyperionAPI.stream_callback(response)
+                    self.stream_callback(response)
                     if response.get("stream_end") == True:
                         break
 

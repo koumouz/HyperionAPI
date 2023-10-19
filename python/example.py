@@ -53,10 +53,12 @@ def main():
         "SYSTEM",
     )
 
-    HyperionAPI.api_key = 0
-    HyperionAPI.uri = "127.0.0.1:5005"
-    HyperionAPI.protocol = "WEBSOCKET"
-    HyperionAPI.stream_callback = streaming_callback
+    api = HyperionAPI(
+        api_key=0,
+        uri="127.0.0.1:5005",
+        protocol="WEBSOCKET",
+        stream_callback=streaming_callback,
+    )
 
     messages = [
         {
@@ -76,7 +78,7 @@ def main():
             prompt = command.split("prompt: ")[1]
             messages.append({"role": "user", "content": prompt})
             stream = True
-            response = HyperionAPI.generate(model, messages, stream=stream)
+            response = api.generate(model, messages, stream=stream)
             output = response.get("output")
             messages.append({"role": "assistant", "content": output})
             Terminal.output(response, "INFO")
@@ -88,25 +90,25 @@ def main():
 
             if method == "load_model":
                 params = Terminal.input("params: ")
-                response = HyperionAPI.load_model("model name: ", stream=False)
+                response = api.load_model("model name: ", stream=False)
             elif method == "unload_model":
                 params = Terminal.input("model name: ")
-                response = HyperionAPI.unload_model(params)
+                response = api.unload_model(params)
             elif method == "get_loaded_models":
-                response = HyperionAPI.get_loaded_models()
+                response = api.get_loaded_models()
             elif method == "get_cached_models":
-                response = HyperionAPI.get_cached_models()
+                response = api.get_cached_models()
             elif method == "create_embedding":
                 # text-embedding-ada-002
                 # llama-2-13b-chat
                 # all-MiniLM-L6-v2
-                response = HyperionAPI.create_embedding(
+                response = api.create_embedding(
                     model="text-embedding-ada-002", input="hello world"
                 )
             elif method == "tokenize":
-                response = HyperionAPI.tokenize("llama-2-13b-chat", "hello world")
+                response = api.tokenize("llama-2-13b-chat", "hello world")
             elif method == "detokenize":
-                response = HyperionAPI.detokenize("llama-2-13b-chat", [1, 22172, 3186])
+                response = api.detokenize("llama-2-13b-chat", [1, 22172, 3186])
             else:
                 Terminal.output("Unknown method: " + method, "ERROR")
                 continue

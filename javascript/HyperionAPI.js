@@ -40,18 +40,18 @@ class HyperionAPI {
 			}
 		}
 
-		let method = "";
+		let apiMethod = "";
 		if (this.protocol === "REST") {
-			method = "model/generate/";
+			apiMethod = "model/generate/";
 		} else {
-			method = "model.generate";
+			apiMethod = "model.generate";
 		}
 
 		try {
-			const response = await this._call(method, params);
+			const response = await this._call(apiMethod, params);
 			return response;
 		} catch (error) {
-			console.log("Hyperion API Error in generate: ", error.message);
+			console.log("Hyperion API Error in " + apiMethod + ": ", error.message);
 			const response = { success: "false", error: error.message };
 			return response;
 		}
@@ -63,18 +63,18 @@ class HyperionAPI {
 			stream: stream,
 		};
 
-		let method = "";
+		let apiMethod = "";
 		if (this.protocol === "REST") {
-			method = "model/load/";
+			apiMethod = "model/load/";
 		} else {
-			method = "model.load";
+			apiMethod = "model.load";
 		}
 
 		try {
-			const response = await this._call(method, params);
+			const response = await this._call(apiMethod, params);
 			return response;
 		} catch (error) {
-			console.log("Hyperion API Error in loadModel: ", error.message);
+			console.log("Hyperion API Error in " + apiMethod + ": ", error.message);
 			const response = { success: "false", error: error.message };
 			return response;
 		}
@@ -83,54 +83,54 @@ class HyperionAPI {
 	async unloadModel({ model = "" } = {}) {
 		let params = { model: model };
 
-		let method = "";
+		let apiMethod = "";
 		if (this.protocol === "REST") {
-			method = "model/unload/";
+			apiMethod = "model/unload/";
 		} else {
-			method = "model.unload";
+			apiMethod = "model.unload";
 		}
 
 		try {
-			const response = await this._call(method, params);
+			const response = await this._call(apiMethod, params);
 			return response;
 		} catch (error) {
-			console.log("Hyperion API Error in unloadModel: ", error.message);
+			console.log("Hyperion API Error in " + apiMethod + ": ", error.message);
 			const response = { success: "false", error: error.message };
 			return response;
 		}
 	}
 
 	async getLoadedModels() {
-		let method = "";
+		let apiMethod = "";
 		if (this.protocol === "REST") {
-			method = "model/loaded/";
+			apiMethod = "model/loaded/";
 		} else {
-			method = "model.loaded";
+			apiMethod = "model.loaded";
 		}
 
 		try {
-			const response = await this._call(method, params);
+			const response = await this._call(apiMethod, params);
 			return response;
 		} catch (error) {
-			console.log("Hyperion API Error in getLoadedModels: ", error.message);
+			console.log("Hyperion API Error in " + apiMethod + ": ", error.message);
 			const response = { success: "false", error: error.message };
 			return response;
 		}
 	}
 
 	async getCachedModels() {
-		let method = "";
+		let apiMethod = "";
 		if (this.protocol === "REST") {
-			method = "model/cached/";
+			apiMethod = "model/cached/";
 		} else {
-			method = "model.cached";
+			apiMethod = "model.cached";
 		}
 
 		try {
-			const response = await this._call(method, params);
+			const response = await this._call(apiMethod, params);
 			return response;
 		} catch (error) {
-			console.log("Hyperion API Error in getCachedModels: ", error.message);
+			console.log("Hyperion API Error in " + apiMethod + ": ", error.message);
 			const response = { success: "false", error: error.message };
 			return response;
 		}
@@ -142,18 +142,18 @@ class HyperionAPI {
 			input: input,
 		};
 
-		let method = "";
+		let apiMethod = "";
 		if (this.protocol === "REST") {
-			method = "embedding/create/";
+			apiMethod = "embedding/create/";
 		} else {
-			method = "embedding.create";
+			apiMethod = "embedding.create";
 		}
 
 		try {
-			const response = await this._call(method, params);
+			const response = await this._call(apiMethod, params);
 			return response;
 		} catch (error) {
-			console.log("Hyperion API Error in createEmbedding: ", error.message);
+			console.log("Hyperion API Error in " + apiMethod + ": ", error.message);
 			const response = { success: "false", error: error.message };
 			return response;
 		}
@@ -165,18 +165,18 @@ class HyperionAPI {
 			text: text,
 		};
 
-		let method = "";
+		let apiMethod = "";
 		if (this.protocol === "REST") {
-			method = "model/tokenize/";
+			apiMethod = "model/tokenize/";
 		} else {
-			method = "model.tokenize";
+			apiMethod = "model.tokenize";
 		}
 
 		try {
-			const response = await this._call(method, params);
+			const response = await this._call(apiMethod, params);
 			return response;
 		} catch (error) {
-			console.log("Hyperion API Error in tokenize: ", error.message);
+			console.log("Hyperion API Error in " + apiMethod + ": ", error.message);
 			const response = { success: "false", error: error.message };
 			return response;
 		}
@@ -188,18 +188,18 @@ class HyperionAPI {
 			tokens: tokens,
 		};
 
-		let method = "";
+		let apiMethod = "";
 		if (this.protocol === "REST") {
-			method = "model/detokenize/";
+			apiMethod = "model/detokenize/";
 		} else {
-			method = "model.detokenize";
+			apiMethod = "model.detokenize";
 		}
 
 		try {
-			const response = await this._call(method, params);
+			const response = await this._call(apiMethod, params);
 			return response;
 		} catch (error) {
-			console.log("Hyperion API Error in detokenize: ", error.message);
+			console.log("Hyperion API Error in " + apiMethod + ": ", error.message);
 			const response = { success: "false", error: error.message };
 			return response;
 		}
