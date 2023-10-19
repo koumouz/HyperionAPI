@@ -23,7 +23,7 @@ class HyperionAPI:
         params.update(kwargs)
 
         if HyperionAPI.protocol == "REST":
-            api_method = "mode/generate/"
+            api_method = "model/generate/"
         else:
             api_method = "model.generate"
 

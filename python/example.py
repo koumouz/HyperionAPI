@@ -55,7 +55,7 @@ def main():
 
     HyperionAPI.api_key = 0
     HyperionAPI.uri = "127.0.0.1:5005"
-    HyperionAPI.protocol = "WEBSOCKET"
+    HyperionAPI.protocol = "REST"
     HyperionAPI.stream_callback = streaming_callback
 
     messages = [
@@ -101,7 +101,7 @@ def main():
                 # llama-2-13b-chat
                 # all-MiniLM-L6-v2
                 response = HyperionAPI.create_embedding(
-                    model="all-MiniLM-L6-v2", input="hello world"
+                    model="text-embedding-ada-002", input="hello world"
                 )
             elif method == "tokenize":
                 response = HyperionAPI.tokenize("llama-2-13b-chat", "hello world")
