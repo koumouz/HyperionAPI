@@ -55,7 +55,7 @@ def main():
 
     HyperionAPI.api_key = 0
     HyperionAPI.uri = "127.0.0.1:5005"
-    HyperionAPI.protocol = "REST"
+    HyperionAPI.protocol = "WEBSOCKET"
     HyperionAPI.stream_callback = streaming_callback
 
     messages = [

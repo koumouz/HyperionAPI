@@ -47,7 +47,14 @@ class HyperionAPI {
 			method = "model.generate";
 		}
 
-		return await this._call(method, params, stream);
+		try {
+			const response = await this._call(method, params);
+			return response;
+		} catch (error) {
+			console.log("Hyperion API Error in generate: ", error.message);
+			const response = { success: "false", error: error.message };
+			return response;
+		}
 	}
 
 	async loadModel({ model = "", stream = false } = {}) {
@@ -63,7 +70,14 @@ class HyperionAPI {
 			method = "model.load";
 		}
 
-		return await this._call(method, params);
+		try {
+			const response = await this._call(method, params);
+			return response;
+		} catch (error) {
+			console.log("Hyperion API Error in loadModel: ", error.message);
+			const response = { success: "false", error: error.message };
+			return response;
+		}
 	}
 
 	async unloadModel({ model = "" } = {}) {
@@ -76,7 +90,14 @@ class HyperionAPI {
 			method = "model.unload";
 		}
 
-		return await this._call(method, params);
+		try {
+			const response = await this._call(method, params);
+			return response;
+		} catch (error) {
+			console.log("Hyperion API Error in unloadModel: ", error.message);
+			const response = { success: "false", error: error.message };
+			return response;
+		}
 	}
 
 	async getLoadedModels() {
@@ -87,7 +108,14 @@ class HyperionAPI {
 			method = "model.loaded";
 		}
 
-		return await this._call(method);
+		try {
+			const response = await this._call(method, params);
+			return response;
+		} catch (error) {
+			console.log("Hyperion API Error in getLoadedModels: ", error.message);
+			const response = { success: "false", error: error.message };
+			return response;
+		}
 	}
 
 	async getCachedModels() {
@@ -98,7 +126,14 @@ class HyperionAPI {
 			method = "model.cached";
 		}
 
-		return await this._call(method);
+		try {
+			const response = await this._call(method, params);
+			return response;
+		} catch (error) {
+			console.log("Hyperion API Error in getCachedModels: ", error.message);
+			const response = { success: "false", error: error.message };
+			return response;
+		}
 	}
 
 	async createEmbedding({ model = "", input = "" } = {}) {
@@ -114,7 +149,14 @@ class HyperionAPI {
 			method = "embedding.create";
 		}
 
-		return await this._call(method, params);
+		try {
+			const response = await this._call(method, params);
+			return response;
+		} catch (error) {
+			console.log("Hyperion API Error in createEmbedding: ", error.message);
+			const response = { success: "false", error: error.message };
+			return response;
+		}
 	}
 
 	async tokenize({ model = "", text = "" } = {}) {
@@ -130,7 +172,14 @@ class HyperionAPI {
 			method = "model.tokenize";
 		}
 
-		return await this._call(method, params);
+		try {
+			const response = await this._call(method, params);
+			return response;
+		} catch (error) {
+			console.log("Hyperion API Error in tokenize: ", error.message);
+			const response = { success: "false", error: error.message };
+			return response;
+		}
 	}
 
 	async detokenize({ model = "", tokens = [] } = {}) {
@@ -146,10 +195,17 @@ class HyperionAPI {
 			method = "model.detokenize";
 		}
 
-		return await this._call(method, params);
+		try {
+			const response = await this._call(method, params);
+			return response;
+		} catch (error) {
+			console.log("Hyperion API Error in detokenize: ", error.message);
+			const response = { success: "false", error: error.message };
+			return response;
+		}
 	}
 
-	async _call(apiMethod, params = null, stream = false) {
+	async _call(apiMethod, params = null) {
 		if (this.protocol === "REST") {
 			const request = { params: params };
 			let response = null;
@@ -172,6 +228,7 @@ class HyperionAPI {
 			return new Promise((resolve, reject) => {
 				const websocket = new WebSocket(`ws://${this.uri}`);
 				const request = { method: apiMethod, params: params };
+				const stream = params.stream;
 				websocket.onopen = () => {
 					websocket.send(JSON.stringify(request));
 				};
