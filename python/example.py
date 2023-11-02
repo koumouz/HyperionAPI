@@ -79,12 +79,16 @@ def main():
             messages.append({"role": "user", "content": prompt})
             stream = True
             response = api.generate(model, messages, stream=stream)
-            output = response.get("output")
-            messages.append({"role": "assistant", "content": output})
-            Terminal.output(response, "INFO")
-            # only print the final output if we are not streaming. Otherwise it's duplicated
-            if stream == False:
-                Terminal.output(output, "AI")
+            if response.get("success", "").lower() == 'false':
+                Terminal.output(response.get("error"), "ERROR")
+                continue
+            else:
+                output = response.get("output")
+                messages.append({"role": "assistant", "content": output})
+                Terminal.output(response, "INFO")
+                # only print the final output if we are not streaming. Otherwise it's duplicated
+                if stream == False:
+                    Terminal.output(output, "AI")
         elif "method: " in command:
             method = command.split("method: ")[1]
 
