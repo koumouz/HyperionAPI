@@ -173,9 +173,10 @@ class HyperionAPI:
                 response = response.json()
             return response
         elif self.protocol == "WEBSOCKET":
-            websocket = create_connection(f"ws://{self.uri}")
+            stream = params.get("stream", False) if params else False
             request = {"method": f"{api_method}", "params": params}
-            stream = params["stream"]
+            
+            websocket = create_connection(f"ws://{self.uri}")
             websocket.send(json.dumps(request))
 
             if stream == True and self.stream_callback is not None:
