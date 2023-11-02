@@ -228,7 +228,7 @@ class HyperionAPI {
 			return new Promise((resolve, reject) => {
 				const websocket = new WebSocket(`ws://${this.uri}`);
 				const request = { method: apiMethod, params: params };
-				const stream = params.stream;
+				const stream = params && "stream" in params ? params.stream : false;
 				websocket.onopen = () => {
 					websocket.send(JSON.stringify(request));
 				};
