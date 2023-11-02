@@ -114,6 +114,8 @@ def main():
                 continue
 
             Terminal.output(response, "INFO")
+        elif command == "quit" or command == "exit":
+            break
 
 
 # And here we go!
