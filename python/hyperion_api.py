@@ -175,13 +175,17 @@ class HyperionAPI:
         elif self.protocol == "WEBSOCKET":
             stream = params.get("stream", False) if params else False
             request = {"method": f"{api_method}", "params": params}
-            
+
             websocket = create_connection(f"ws://{self.uri}")
             websocket.send(json.dumps(request))
 
             if stream == True and self.stream_callback is not None:
                 while True:
                     response = json.loads(websocket.recv())
+                    if response.get("success", "").lower() == 'false':
+                        websocket.close()
+                        return response
+                    
                     self.stream_callback(response)
                     if response.get("stream_end") == True:
                         break
