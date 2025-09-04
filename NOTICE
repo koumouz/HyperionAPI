@@ -1,0 +1,4 @@
+Hyperion – a python based model server that hosts open source LLM and SD models and makes them accessible to applications via a simple REST or WebSocket API.
+Copyright (c) 2024 Constantin Koumouzelis, Art Min
+
+This product includes software developed by Constantin Koumouzelis and Art Min (https://github.com/koumouz).
