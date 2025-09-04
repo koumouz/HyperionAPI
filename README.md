@@ -2,7 +2,7 @@
 
 Hyperion is an AI Model Server. Effectively, it is to AI what Apache HTTPD is to the web. Hyperion hosts open source LLM and SD models and makes them accessible to applications via a simple REST or WebSocket API. The goal for Hyperion is to create a lightweight hosting environment for AI models and handle how they are loaded, how they are run and how prompts are translated to the model specific format. This allows developers to focus on their application and core logic, without needing to worry about the specifics of any individual AI model. In fact, through Hyperion, an application can mix and match models per prompt to choose the best model for the specific prompt they want to execute, without needing to worry about formatting or runtime considerations.
 
-You can learn more about Hyperion here: https://github.com/FluentDynamics/Hyperion
+You can learn more about Hyperion here: https://github.com/koumouz/Hyperion
 
 ## API
 Libraries are provided for Python and JavaScript (initially) to allow for easy integration into applications. The API aims to be as similar as possible to the OpenAI API, so application development is as simple as possible.
@@ -50,3 +50,7 @@ The response format:
 	"method": "model.generate"
 }
 ```
+
+## License
+Apache License 2.0. See [LICENSE](./LICENSE).
+Attribution required: see [NOTICE](./NOTICE).
